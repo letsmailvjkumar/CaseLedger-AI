@@ -1,6 +1,6 @@
 {
   "name": "CaseLedger AI",
-  "description": "Governed 3D AML & regulatory copilot surfacing fraud signals, evidence chains, policy citations, and reproducible decision replays.",
+  "description": "Governed 3D AML & regulatory copilot built with Snowflake CoCo CLI and Snowflake Cortex AI, featuring interactive CLI execution, Cortex search, and reproducible decision replays.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

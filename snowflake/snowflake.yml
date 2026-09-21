@@ -1,0 +1,30 @@
+definition_version: '1.1'
+project:
+  name: caseledger_aml
+  type: application
+  version: '1.4.2'
+
+entities:
+  - name: caseledger_streamlit
+    type: streamlit
+    identifier:
+      name: CASELEDGER_AML_APP
+      database: CASELEDGER_DB
+      schema: AML_CORE
+    main_file: streamlit/streamlit_app.py
+    query_warehouse: COMPLIANCE_WH
+    stage: STREAMLIT_STAGE
+
+  - name: aml_policy_search
+    type: cortex_search_service
+    identifier:
+      name: AML_POLICY_SEARCH_SVC
+      database: CASELEDGER_DB
+      schema: AML_CORE
+    on: POLICY_TEXT
+    attributes:
+      - POLICY_NAME
+      - SECTION
+      - REGULATORY_BODY
+    warehouse: COMPLIANCE_WH
+    target_lag: '1 hour'

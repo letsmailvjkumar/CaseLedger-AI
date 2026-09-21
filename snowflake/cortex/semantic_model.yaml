@@ -1,0 +1,71 @@
+# ==============================================================================
+# Snowflake Cortex Analyst Semantic Data Model
+# File: semantic_model.yaml
+# Used by: coco cortex analyst "What accounts have rapid pass-through > 80%?"
+# ==============================================================================
+
+name: CaseLedger_AML_Semantic_Model
+description: Semantic view over transaction flows, CTR thresholds, and account risk flags for natural language AML queries.
+
+tables:
+  - name: TRANSACTIONS
+    base_table:
+      database: CASELEDGER_DB
+      schema: AML_CORE
+      table: TRANSACTIONS
+    description: Individual credit and debit transactions across cash branches, IMPS, RTGS, and UPI.
+    dimensions:
+      - name: TRANSACTION_ID
+        type: VARCHAR
+        description: Unique primary transaction identifier.
+      - name: SOURCE_ACCOUNT_ID
+        type: VARCHAR
+        description: Subject account executing or receiving transaction.
+      - name: COUNTERPARTY_NAME
+        type: VARCHAR
+        description: Name of sending or receiving counterparty.
+      - name: TRANSACTION_TYPE
+        type: VARCHAR
+        description: CREDIT (inflow) or DEBIT (outflow).
+      - name: CHANNEL
+        type: VARCHAR
+        description: Payment rail (CASH_BRANCH, IMPS, RTGS, UPI).
+      - name: IS_FLAGGED
+        type: BOOLEAN
+        description: Flagged by deterministic AML structuring or velocity rules.
+      - name: DEVICE_ID
+        type: VARCHAR
+        description: Hardware signature / terminal ID executing the transfer.
+    time_dimensions:
+      - name: EXECUTION_TIMESTAMP
+        type: TIMESTAMP_NTZ
+        description: Exact timestamp when transaction settled.
+    measures:
+      - name: AMOUNT
+        type: NUMBER
+        default_aggregation: sum
+        description: Monetary transaction amount in INR.
+      - name: CTR_PROXIMITY
+        type: NUMBER
+        default_aggregation: avg
+        description: Ratio relative to ₹10,00,000 statutory CTR threshold.
+
+  - name: ACCOUNTS
+    base_table:
+      database: CASELEDGER_DB
+      schema: AML_CORE
+      table: ACCOUNTS
+    description: Monitored entity accounts with branch details and risk scores.
+    dimensions:
+      - name: ACCOUNT_ID
+        type: VARCHAR
+      - name: HOLDER_NAME
+        type: VARCHAR
+      - name: RISK_TIER
+        type: VARCHAR
+      - name: BRANCH_NAME
+        type: VARCHAR
+    measures:
+      - name: RISK_SCORE
+        type: NUMBER
+        default_aggregation: max

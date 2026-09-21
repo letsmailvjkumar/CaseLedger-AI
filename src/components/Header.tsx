@@ -1,6 +1,6 @@
 import React from 'react';
 import { Account } from '../types';
-import { ShieldCheck, History, FileText, Box, Layers, AlertCircle, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, History, FileText, Box, Layers, AlertCircle, ChevronDown, CheckCircle2, Terminal } from 'lucide-react';
 
 interface HeaderProps {
   currentAccount: Account;
@@ -10,6 +10,7 @@ interface HeaderProps {
   setActiveView: (view: '3D_EXPLORER' | 'EVIDENCE' | 'LEDGER') => void;
   onOpenReplay: () => void;
   onOpenAuditReport: () => void;
+  onOpenCoCoTerminal: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,6 +21,7 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveView,
   onOpenReplay,
   onOpenAuditReport,
+  onOpenCoCoTerminal,
 }) => {
   return (
     <header className="bg-slate-950 border-b border-slate-800 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 select-none sticky top-0 z-30">
@@ -154,6 +156,17 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Ledger</span>
           </button>
         </div>
+
+        {/* Snowflake CoCo CLI Button */}
+        <button
+          onClick={onOpenCoCoTerminal}
+          className="px-3 py-1.5 bg-sky-950/80 hover:bg-sky-900/80 text-sky-300 border border-sky-500/40 hover:border-sky-400 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm group"
+          title="Open Snowflake CoCo CLI interactive terminal & Cortex toolchain"
+        >
+          <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+          <Terminal className="w-3.5 h-3.5 text-sky-400 group-hover:rotate-6 transition-transform" />
+          <span className="font-mono">CoCo CLI</span>
+        </button>
 
         {/* The Replay Button */}
         <button

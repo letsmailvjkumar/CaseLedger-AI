@@ -137,3 +137,36 @@ export interface CopilotMessage {
   policyCitations?: string[];
   suggestedActions?: string[];
 }
+
+export interface CoCoCommandLog {
+  id: string;
+  command: string;
+  output: string;
+  queryId?: string;
+  durationMs?: number;
+  exitCode: number;
+  timestamp: string;
+}
+
+export interface SnowflakeStatus {
+  cliVersion: string;
+  engine: string;
+  connection: {
+    account: string;
+    warehouse: string;
+    database: string;
+    schema: string;
+    role: string;
+    status: string;
+    cortexSearchService: string;
+    semanticModel: string;
+    modelsAvailable: string[];
+  };
+  workshopsImplemented: {
+    id: string;
+    title: string;
+    status: string;
+    coverage: string[];
+  }[];
+}
+

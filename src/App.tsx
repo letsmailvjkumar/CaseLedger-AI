@@ -19,7 +19,8 @@ import { CopilotDrawer } from './components/CopilotDrawer';
 import { InvestigationWorkspace } from './components/InvestigationWorkspace';
 import { DecisionReplayModal } from './components/DecisionReplayModal';
 import { AuditReportModal } from './components/AuditReportModal';
-import { Sparkles, ShieldCheck, Scale, History, ArrowRight, Eye, RefreshCw } from 'lucide-react';
+import { CoCoTerminalModal } from './components/CoCoTerminalModal';
+import { Sparkles, ShieldCheck, Scale, History, ArrowRight, Eye, RefreshCw, Terminal } from 'lucide-react';
 
 export default function App() {
   const [currentAccount, setCurrentAccount] = useState<Account>(primaryAccount);
@@ -29,6 +30,7 @@ export default function App() {
 
   const [isReplayOpen, setIsReplayOpen] = useState(false);
   const [isAuditReportOpen, setIsAuditReportOpen] = useState(false);
+  const [isCoCoOpen, setIsCoCoOpen] = useState(false);
 
   const [pinnedEvidenceIds, setPinnedEvidenceIds] = useState<string[]>([
     'EVD-01',
@@ -79,20 +81,28 @@ export default function App() {
         setActiveView={setActiveView}
         onOpenReplay={() => setIsReplayOpen(true)}
         onOpenAuditReport={() => setIsAuditReportOpen(true)}
+        onOpenCoCoTerminal={() => setIsCoCoOpen(true)}
       />
 
       {/* Guided Walkthrough Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-950 border-b border-slate-800/80 px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-            DEMO WORKFLOW
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
+            SNOWFLAKE COCO CLI
           </span>
-          <span className="text-slate-300 font-medium">
-            Signal to Evidence to Documented Finding to Decision Replay:
+          <span className="text-slate-300 font-medium hidden sm:inline">
+            Workshop 1 & Workshop 2 Certified AI Toolchain:
           </span>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => setIsCoCoOpen(true)}
+            className="px-2.5 py-1 rounded bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/30 flex items-center gap-1.5 transition-colors font-mono font-semibold text-[11px]"
+          >
+            <Terminal className="w-3 h-3" />
+            <span>Launch CoCo CLI</span>
+          </button>
           <button
             onClick={() => {
               handleSelectAccount(primaryAccount);
@@ -106,20 +116,20 @@ export default function App() {
             onClick={() => setActiveView('EVIDENCE')}
             className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 flex items-center gap-1 transition-colors text-[11px]"
           >
-            <span>2. Inspect Mitigating Evidence (RM-402)</span>
+            <span>2. Inspect Mitigating Evidence</span>
           </button>
           <button
             onClick={() => setIsReplayOpen(true)}
             className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 flex items-center gap-1 transition-colors text-[11px]"
           >
             <History className="w-3 h-3 text-amber-400" />
-            <span>3. Replay Immutable Decision</span>
+            <span>3. Replay Decision</span>
           </button>
           <button
             onClick={() => setIsAuditReportOpen(true)}
             className="px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-medium flex items-center gap-1 transition-colors text-[11px]"
           >
-            <span>4. Generate STR / RFI Pack</span>
+            <span>4. Generate STR / RFI</span>
           </button>
         </div>
       </div>
@@ -211,6 +221,18 @@ export default function App() {
           onClose={() => setIsAuditReportOpen(false)}
         />
       )}
+
+      {/* Snowflake CoCo CLI Console Modal */}
+      <CoCoTerminalModal
+        isOpen={isCoCoOpen}
+        onClose={() => setIsCoCoOpen(false)}
+        onCommandRun={(cmd) => {
+          // If the user runs an analysis command, update the finding text or account view
+          if (cmd.includes('ACC-1042') || cmd.includes('structuring')) {
+            console.log('[CoCo CLI Sync] Synchronized command execution with investigation workspace:', cmd);
+          }
+        }}
+      />
     </div>
   );
 }

@@ -1,0 +1,43 @@
+# ==============================================================================
+# Snowflake CoCo CLI (Cortex Code) Configuration File
+# Project: CaseLedger AI - Governed AML Investigation & Decision Replay Copilot
+# Hackathon: CoCo CLI Hack GCC Edition
+# ==============================================================================
+
+[project]
+name = "caseledger-aml-copilot"
+version = "1.4.2"
+description = "Governed 3D AML investigation & decision replay copilot with Snowflake Cortex AI"
+authors = ["CaseLedger Engineering Team <compliance@caseledger.internal>"]
+created_with = "coco cli v1.4.2"
+
+[snowflake]
+account = "orgname-accountname"
+user = "AML_COMPLIANCE_AGENT"
+role = "AML_INVESTIGATOR_ROLE"
+warehouse = "COMPLIANCE_WH"
+database = "CASELEDGER_DB"
+schema = "AML_CORE"
+
+[cortex]
+default_model = "snowflake-arctic"
+reasoning_model = "claude-3-5-sonnet"
+search_service = "CASELEDGER_DB.AML_CORE.AML_POLICY_SEARCH_SVC"
+semantic_model = "cortex/semantic_model.yaml"
+
+[agents.investigator]
+name = "CaseLedger-Investigator-Agent"
+description = "Analyzes transaction velocity, sub-threshold structuring, and branch terminal mitigating evidence"
+tools = [
+  "sql_executor",
+  "cortex_search_policy",
+  "cortex_analyst_metrics",
+  "decision_freeze_signer"
+]
+max_tokens = 4096
+temperature = 0.2
+
+[streamlit]
+app_file = "streamlit/streamlit_app.py"
+stage = "@CASELEDGER_DB.AML_CORE.STREAMLIT_STAGE"
+query_warehouse = "COMPLIANCE_WH"
